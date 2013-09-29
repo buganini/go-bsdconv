@@ -9,15 +9,22 @@ package bsdconv
 import "C"
 import "unsafe"
 
-func Create(s string)(*_Ctype_struct_bsdconv_instance) {
+type Bsdconv struct {
+	ins *_Ctype_struct_bsdconv_instance
+}
+
+func Create(s string)(*Bsdconv) {
 	conv := C.CString(s)
 	ins := C.bsdconv_create(conv)
 	C.free(unsafe.Pointer(conv))
-	return ins
+	ret := new(Bsdconv)
+	ret.ins = ins
+	return ret
 }
 
 
-func Conv(ins *_Ctype_struct_bsdconv_instance, b []byte)([]byte) {
+func (this Bsdconv) Conv(b []byte)([]byte) {
+	ins := this.ins
 	C.bsdconv_init(ins);
 	ins.output_mode=C.BSDCONV_AUTOMALLOC;
 	ins.input.data=unsafe.Pointer(&b[0])
@@ -31,6 +38,6 @@ func Conv(ins *_Ctype_struct_bsdconv_instance, b []byte)([]byte) {
 	return ret
 }
 
-func Destroy(ins *_Ctype_struct_bsdconv_instance) {
-	C.bsdconv_destroy(ins)
+func (this Bsdconv) Destroy() {
+	C.bsdconv_destroy(this.ins)
 }
