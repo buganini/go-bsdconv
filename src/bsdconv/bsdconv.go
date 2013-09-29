@@ -23,6 +23,39 @@ func Create(s string)(*Bsdconv) {
 }
 
 
+func (this Bsdconv) Conv_chunk(b []byte)([]byte) {
+	ins := this.ins
+	ins.output_mode=C.BSDCONV_AUTOMALLOC;
+	ins.input.data=unsafe.Pointer(&b[0])
+	ins.input.len=C.size_t(len(b))
+	ins.input.flags=0
+	ins.input.next=nil
+	C.bsdconv(ins)
+	ret:=C.GoBytes(unsafe.Pointer(ins.output.data), C.int(ins.output.len))
+	C.bsdconv_free(unsafe.Pointer(ins.output.data))
+	return ret
+}
+
+func (this Bsdconv) Init() {
+	C.bsdconv_init(this.ins);
+}
+
+func (this Bsdconv) Conv_chunk_last(b []byte)([]byte) {
+	ins := this.ins
+	ins.output_mode=C.BSDCONV_AUTOMALLOC;
+	if len(b) > 0 {
+		ins.input.data=unsafe.Pointer(&b[0])
+	}
+	ins.input.len=C.size_t(len(b))
+	ins.input.flags=0
+	ins.input.next=nil
+	ins.flush=1
+	C.bsdconv(ins)
+	ret:=C.GoBytes(unsafe.Pointer(ins.output.data), C.int(ins.output.len))
+	C.bsdconv_free(unsafe.Pointer(ins.output.data))
+	return ret
+}
+
 func (this Bsdconv) Conv(b []byte)([]byte) {
 	ins := this.ins
 	C.bsdconv_init(ins);

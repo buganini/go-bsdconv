@@ -1,4 +1,4 @@
 #Run
     cd go-bsdconv/
     export GOPATH=`pwd`
-    go run example.go
+    echo AaBbЯя | go run example.go utf-8:casefold:utf-8
