@@ -17,5 +17,7 @@ func main() {
 		count, _ = inf.Read(buf)
 	}
 	fmt.Print(string(c.Conv_chunk_last(nil)))
+	fmt.Println("====================================")
+	fmt.Println(c.Counter(nil))
 	c.Destroy()
 }

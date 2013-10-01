@@ -74,3 +74,18 @@ func (this Bsdconv) Conv(b []byte)([]byte) {
 func (this Bsdconv) Destroy() {
 	C.bsdconv_destroy(this.ins)
 }
+
+func (this Bsdconv) Counter(ct interface{})(interface{}) {
+	ins := this.ins
+	if(ct==nil){
+		ret := map[string] uint {}
+		p := ins.counter
+		for p != nil {
+			ret[C.GoString(p.key)] = uint(p.val)
+			p = p.next
+		}
+		return ret
+	}
+	v := C.bsdconv_counter(ins, C.CString(ct.(string)))
+	return uint(*v)
+}
