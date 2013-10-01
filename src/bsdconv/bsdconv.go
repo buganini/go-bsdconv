@@ -8,6 +8,7 @@ package bsdconv
 */
 import "C"
 import "unsafe"
+import "strings"
 
 type Bsdconv struct {
 	ins *_Ctype_struct_bsdconv_instance
@@ -22,6 +23,13 @@ func Create(s string)(*Bsdconv) {
 	return ret
 }
 
+func (this Bsdconv) String()(string) {
+	ins := this.ins
+	str := C.bsdconv_pack(ins)
+	s := []string{"bsdconv.Create(\"", C.GoString(str), "\")"};
+	C.bsdconv_free(unsafe.Pointer(str))
+	return strings.Join(s, "")
+}
 
 func (this Bsdconv) Conv_chunk(b []byte)([]byte) {
 	ins := this.ins
