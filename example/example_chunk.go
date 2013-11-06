@@ -8,6 +8,10 @@ import (
 
 func main() {
 	c:=bsdconv.Create(os.Args[1])
+	if c==nil {
+		os.Exit(1)
+	}
+
 	c.Init()
 	buf := make([]byte, 100)
 	inf := os.Stdin

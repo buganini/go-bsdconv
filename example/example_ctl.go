@@ -14,6 +14,10 @@ func main() {
 	clist := bsdconv.Fopen("characters_list.txt","w+")
 
 	p:=bsdconv.Create("utf-8:score-train:null")
+	if p==nil {
+		os.Exit(1)
+	}
+
 	p.Ctl(bsdconv.CTL_ATTACH_SCORE, unsafe.Pointer(fp), 0)
 	p.Ctl(bsdconv.CTL_ATTACH_OUTPUT_FILE, unsafe.Pointer(clist), 0)
 

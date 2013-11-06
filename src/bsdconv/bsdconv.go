@@ -28,6 +28,9 @@ func Create(s string)(*Bsdconv) {
 	conv := C.CString(s)
 	ins := C.bsdconv_create(conv)
 	C.free(unsafe.Pointer(conv))
+	if ins == nil {
+		return nil
+	}
 	ret := new(Bsdconv)
 	ret.ins = ins
 	return ret
