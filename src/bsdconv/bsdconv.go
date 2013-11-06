@@ -4,11 +4,21 @@ package bsdconv
 #cgo CFLAGS: -I/usr/include
 #cgo LDFLAGS: -L/usr/lib -lbsdconv
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <bsdconv.h>
 */
 import "C"
 import "unsafe"
 import "strings"
+
+const (
+	CTL_ATTACH_SCORE = C.BSDCONV_ATTACH_SCORE
+	CTL_SET_WIDE_AMBI = C.BSDCONV_SET_WIDE_AMBI
+	CTL_SET_TRIM_WIDTH = C.BSDCONV_SET_TRIM_WIDTH
+	CTL_ATTACH_OUTPUT_FILE = C.BSDCONV_ATTACH_OUTPUT_FILE
+	CTL_AMBIGUOUS_PAD = C.BSDCONV_AMBIGUOUS_PAD
+)
 
 type Bsdconv struct {
 	ins *_Ctype_struct_bsdconv_instance
@@ -96,4 +106,27 @@ func (this Bsdconv) Counter(ct interface{})(interface{}) {
 	}
 	v := C.bsdconv_counter(ins, C.CString(ct.(string)))
 	return uint(*v)
+}
+
+func (this Bsdconv) Ctl(ctl int, p unsafe.Pointer, v int) {
+	ins := this.ins
+	C.bsdconv_ctl(ins, C.int(ctl), p, C.int(v))
+}
+
+func Mktemp(template string)(*C.FILE, string) {
+	t := C.strdup(C.CString(template))
+	fd := C.mkstemp(t)
+	fp := C.fdopen(fd, C.CString("wb+"))
+	fn := C.GoString(t)
+	C.free(unsafe.Pointer(t))
+	return fp, fn
+}
+
+func Fopen(p string, m string)(*C.FILE) {
+	f, _ := C.fopen(C.CString(p), C.CString(m))
+	return f
+}
+
+func Fclose(fp *C.FILE) {
+	C.fclose(fp)
 }
