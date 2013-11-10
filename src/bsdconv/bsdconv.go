@@ -13,6 +13,9 @@ import "unsafe"
 import "strings"
 
 const (
+	FROM = C.FROM
+	INTER = C.INTER
+	TO = C.TO
 	CTL_ATTACH_SCORE = C.BSDCONV_ATTACH_SCORE
 	CTL_SET_WIDE_AMBI = C.BSDCONV_SET_WIDE_AMBI
 	CTL_SET_TRIM_WIDTH = C.BSDCONV_SET_TRIM_WIDTH
@@ -114,6 +117,23 @@ func (this Bsdconv) Counter(ct interface{})(interface{}) {
 func (this Bsdconv) Ctl(ctl int, p unsafe.Pointer, v int) {
 	ins := this.ins
 	C.bsdconv_ctl(ins, C.int(ctl), p, C.int(v))
+}
+
+func Codec_check(t int, c string)(bool) {
+	r := C.bsdconv_codec_check(C.int(t), C.CString(c))
+	return uint(r) != 0
+}
+
+func Codecs_list(t int)([]string) {
+	p := C.bsdconv_codecs_list(C.int(t))
+	defer C.bsdconv_free(unsafe.Pointer(p));
+	ret := []string{}
+	for *p != nil {
+		ret = append(ret, C.GoString(*p))
+		C.bsdconv_free(unsafe.Pointer(*p))
+		p = (**_Ctype_char)(unsafe.Pointer(uintptr(unsafe.Pointer(p)) + unsafe.Sizeof(*p)))
+	}
+	return ret
 }
 
 func Mktemp(template string)(*C.FILE, string) {
