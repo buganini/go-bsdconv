@@ -1,5 +1,7 @@
 package main
 
+//go run example_conv_file.go utf-8:full:utf-8 in.txt out.txt
+
 import (
 	"os"
 	"fmt"
