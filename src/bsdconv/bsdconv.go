@@ -11,8 +11,10 @@ package bsdconv
 import "C"
 import "unsafe"
 import "strings"
+import "syscall"
 
 const (
+	IBUFLEN = 8192
 	FROM = C.FROM
 	INTER = C.INTER
 	TO = C.TO
@@ -47,6 +49,10 @@ func (this Bsdconv) String()(string) {
 	return strings.Join(s, "")
 }
 
+func (this Bsdconv) Init() {
+	C.bsdconv_init(this.ins);
+}
+
 func (this Bsdconv) Conv_chunk(b []byte)([]byte) {
 	ins := this.ins
 	ins.output_mode=C.BSDCONV_AUTOMALLOC;
@@ -58,10 +64,6 @@ func (this Bsdconv) Conv_chunk(b []byte)([]byte) {
 	ret:=C.GoBytes(unsafe.Pointer(ins.output.data), C.int(ins.output.len))
 	C.bsdconv_free(unsafe.Pointer(ins.output.data))
 	return ret
-}
-
-func (this Bsdconv) Init() {
-	C.bsdconv_init(this.ins);
 }
 
 func (this Bsdconv) Conv_chunk_last(b []byte)([]byte) {
@@ -93,6 +95,50 @@ func (this Bsdconv) Conv(b []byte)([]byte) {
 	ret:=C.GoBytes(unsafe.Pointer(ins.output.data), C.int(ins.output.len))
 	C.bsdconv_free(unsafe.Pointer(ins.output.data))
 	return ret
+}
+
+func (this Bsdconv) Conv_file(ifile string, ofile string) {
+	ins := this.ins
+
+	inf := C.fopen(C.CString(ifile), C.CString("r"))
+	if(inf==nil) {
+		return
+	}
+	t := C.strdup(C.CString(ofile+".XXXXXX"))
+	fd := C.mkstemp(t)
+	if(fd == -1) {
+		C.fclose(inf)
+		C.free(unsafe.Pointer(t))
+		return
+	}
+	otf := C.fdopen(fd, C.CString("wb+"))
+	tempfile := C.GoString(t)
+	C.free(unsafe.Pointer(t))
+
+	var stat syscall.Stat_t
+	syscall.Fstat(int(C.fileno(inf)), &stat)
+	syscall.Fchown(int(C.fileno(otf)), int(stat.Uid), int(stat.Gid))
+	syscall.Fchmod(int(C.fileno(otf)), stat.Mode)
+
+	C.bsdconv_init(ins)
+	for ins.flush==0 {
+		in := C.bsdconv_malloc(IBUFLEN)
+		ins.input.data = in
+		ins.input.len = C.fread(in, 1, IBUFLEN, inf)
+		ins.input.flags |= C.F_FREE
+		ins.input.next = nil
+		if(ins.input.len == 0){
+			ins.flush = 1
+		}
+		ins.output_mode = C.BSDCONV_FILE
+		ins.output.data = unsafe.Pointer(otf)
+		C.bsdconv(ins)
+	}
+
+	C.fclose(inf)
+	C.fclose(otf)
+	syscall.Unlink(ofile)
+	syscall.Rename(tempfile, ofile)
 }
 
 func (this Bsdconv) Destroy() {
