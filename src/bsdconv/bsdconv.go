@@ -119,6 +119,30 @@ func (this Bsdconv) Ctl(ctl int, p unsafe.Pointer, v int) {
 	C.bsdconv_ctl(ins, C.int(ctl), p, C.int(v))
 }
 
+func Insert_phase(conversion string, codec string, phase_type int, phasen int)(string) {
+	s := C.bsdconv_insert_phase(C.CString(conversion), C.CString(codec), C.int(phase_type), C.int(phasen));
+	defer C.bsdconv_free(unsafe.Pointer(s))
+	return C.GoString(s);
+}
+
+func Insert_codec(conversion string, codec string, phasen int, codecn int)(string) {
+	s := C.bsdconv_insert_codec(C.CString(conversion), C.CString(codec), C.int(phasen), C.int(codecn));
+	defer C.bsdconv_free(unsafe.Pointer(s))
+	return C.GoString(s);
+}
+
+func Replace_phase(conversion string, codec string, phase_type int, phasen int)(string) {
+	s := C.bsdconv_replace_phase(C.CString(conversion), C.CString(codec), C.int(phase_type), C.int(phasen));
+	defer C.bsdconv_free(unsafe.Pointer(s))
+	return C.GoString(s);
+}
+
+func Replace_codec(conversion string, codec string, phasen int, codecn int)(string) {
+	s := C.bsdconv_replace_codec(C.CString(conversion), C.CString(codec), C.int(phasen), C.int(codecn));
+	defer C.bsdconv_free(unsafe.Pointer(s))
+	return C.GoString(s);
+}
+
 func Codec_check(t int, c string)(bool) {
 	r := C.bsdconv_codec_check(C.int(t), C.CString(c))
 	return uint(r) != 0
