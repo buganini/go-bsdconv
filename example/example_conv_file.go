@@ -16,8 +16,7 @@ func main() {
 
 	c.Conv_file(os.Args[2], os.Args[3])
 
-	fmt.Println("====================================")
-	fmt.Println(c.Counter(nil))
 	fmt.Println(c)
+	fmt.Println(c.Counter(nil))
 	c.Destroy()
 }
