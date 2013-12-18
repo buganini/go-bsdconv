@@ -1,3 +1,6 @@
+#Documentation
+	http://buganini.github.io/bsdconv/go-bsdconv/doc/api.html
+
 #Run
     cd go-bsdconv/
     export GOPATH=`pwd`
