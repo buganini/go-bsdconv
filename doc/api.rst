@@ -57,19 +57,19 @@ Go binding API
 
 .. go:function:: func Insert_phase(conversion string, codec string, phase_type int, phasen int)(string)
 
-	Manipulate conversion string
+	Insert conversion phase into bsdconv conversion string
 
 .. go:function:: func Insert_codec(conversion string, codec string, phasen int, codecn int)(string)
 
-	Manipulate conversion string
+	Insert conversion codec into bsdconv conversion string
 
 .. go:function:: func Replace_phase(conversion string, codec string, phase_type int, phasen int)(string)
 
-	Manipulate conversion string
+	Replace conversion phase in the bsdconv conversion string
 
 .. go:function:: func Replace_codec(conversion string, codec string, phasen int, codecn int)(string)
 
-	Manipulate conversion string
+	Replace conversion codec in the bsdconv conversion string
 
 .. go:function:: func Codec_check(t int, c string)(bool)
 
