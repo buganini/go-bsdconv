@@ -3,6 +3,20 @@ Go binding API
 
 .. go:package:: bsdconv
 
+.. go:const:: FROM
+.. go:const:: INTER
+.. go:const:: TO
+
+	Phase type
+
+.. go:const:: CTL_ATTACH_SCORE
+.. go:const:: CTL_SET_WIDE_AMBI
+.. go:const:: CTL_SET_TRIM_WIDTH
+.. go:const:: CTL_ATTACH_OUTPUT_FILE
+.. go:const:: CTL_AMBIGUOUS_PAD
+
+	Request for :go:func:`(bsdconv.Bsdconv) Ctl`
+
 .. go:type:: Bsdconv
 
 .. go:function:: func Create(s string)(*Bsdconv)
@@ -37,7 +51,7 @@ Go binding API
 
 	Get counter or counters if ct is nil
 
-.. go:function:: func (this Bsdconv) Ctl(ctl int, p unsafe.Pointer, v int)
+.. go:function:: func (this Bsdconv) Ctl(request int, ptr unsafe.Pointer, val int)
 
 	Manipulate the underlying codec parameters
 
