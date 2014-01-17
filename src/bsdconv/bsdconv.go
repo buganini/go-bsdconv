@@ -30,6 +30,7 @@ import "syscall"
 
 const (
 	IBUFLEN = 8192
+	FILTER = C.FILTER
 	FROM = C.FROM
 	INTER = C.INTER
 	TO = C.TO
