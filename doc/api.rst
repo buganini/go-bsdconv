@@ -3,6 +3,7 @@ Go binding API
 
 .. go:package:: bsdconv
 
+.. go:const:: FILTER
 .. go:const:: FROM
 .. go:const:: INTER
 .. go:const:: TO
@@ -69,13 +70,13 @@ Go binding API
 
 	Replace conversion codec in the bsdconv conversion string
 
-.. go:function:: func Codec_check(t int, c string)(bool)
+.. go:function:: func Module_check(type int, module string)(bool)
 
-	Check codec availability with given phase type and codec name
+	Check availability with given type and module name
 
-.. go:function:: func Codecs_list(t int)([]string)
+.. go:function:: func Modules_list(type int)([]string)
 
-	Get codecs list of given phase type
+	Get modules list of specified type
 
 .. go:function:: func Mktemp(template string)(*C.FILE, string)
 
