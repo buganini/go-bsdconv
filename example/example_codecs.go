@@ -6,21 +6,25 @@ import (
 )
 
 func main() {
-	r1 := bsdconv.Codec_check(bsdconv.FROM, "_utf-8")
+	r1 := bsdconv.Module_check(bsdconv.FROM, "_utf-8")
 	fmt.Println(r1)
 
-	r2 := bsdconv.Codec_check(bsdconv.INTER, "_utf-8")
+	r2 := bsdconv.Module_check(bsdconv.INTER, "_utf-8")
 	fmt.Println(r2)
 
+	fmt.Println("Filter:")
+	list_filter := bsdconv.Modules_list(bsdconv.FILTER)
+	fmt.Println(list_filter)
+
 	fmt.Println("From:")
-	list_from := bsdconv.Codecs_list(bsdconv.FROM)
+	list_from := bsdconv.Modules_list(bsdconv.FROM)
 	fmt.Println(list_from)
 
 	fmt.Println("Inter:")
-	list_inter := bsdconv.Codecs_list(bsdconv.INTER)
+	list_inter := bsdconv.Modules_list(bsdconv.INTER)
 	fmt.Println(list_inter)
 
 	fmt.Println("To:")
-	list_to := bsdconv.Codecs_list(bsdconv.TO)
+	list_to := bsdconv.Modules_list(bsdconv.TO)
 	fmt.Println(list_to)
 }

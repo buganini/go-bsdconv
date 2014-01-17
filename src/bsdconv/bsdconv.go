@@ -203,13 +203,13 @@ func Replace_codec(conversion string, codec string, phasen int, codecn int)(stri
 	return C.GoString(s);
 }
 
-func Codec_check(t int, c string)(bool) {
-	r := C.bsdconv_codec_check(C.int(t), C.CString(c))
+func Module_check(t int, c string)(bool) {
+	r := C.bsdconv_module_check(C.int(t), C.CString(c))
 	return uint(r) != 0
 }
 
-func Codecs_list(t int)([]string) {
-	p := C.bsdconv_codecs_list(C.int(t))
+func Modules_list(t int)([]string) {
+	p := C.bsdconv_modules_list(C.int(t))
 	defer C.bsdconv_free(unsafe.Pointer(p));
 	ret := []string{}
 	for *p != nil {
