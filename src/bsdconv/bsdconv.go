@@ -208,6 +208,10 @@ func Module_check(t int, c string)(bool) {
 	return uint(r) != 0
 }
 
+func Codec_check(t int, c string)(bool) {
+	return Module_check(t, c);
+}
+
 func Modules_list(t int)([]string) {
 	p := C.bsdconv_modules_list(C.int(t))
 	defer C.bsdconv_free(unsafe.Pointer(p));
@@ -218,6 +222,10 @@ func Modules_list(t int)([]string) {
 		p = (**_Ctype_char)(unsafe.Pointer(uintptr(unsafe.Pointer(p)) + unsafe.Sizeof(*p)))
 	}
 	return ret
+}
+
+func Codecs_list(t int)([]string) {
+	return Modules_list(t);
 }
 
 func Mktemp(template string)(*C.FILE, string) {
