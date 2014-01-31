@@ -70,9 +70,17 @@ Go binding API
 
 	Replace conversion codec in the bsdconv conversion string
 
+.. go:function:: func Codec_check(type int, module string)(bool)
+
+	DEPRECATED: Use :go:func:`Module_check` instead
+
 .. go:function:: func Module_check(type int, module string)(bool)
 
 	Check availability with given type and module name
+
+.. go:function:: func Codecs_list(type int)([]string)
+
+	DEPRECATED: Use :go:func:`Modules_list` instead
 
 .. go:function:: func Modules_list(type int)([]string)
 
